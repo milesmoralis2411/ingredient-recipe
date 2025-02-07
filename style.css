@@ -1,0 +1,124 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    background-image: url(top-view-different-seasonings-with-fresh-vegetables-dark-desk-spicy-pepper-food-salad-health.jpg);
+    background-size: cover; /* Ensures the background image covers the entire page */
+   
+    
+}
+
+/* Container for the whole page */
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Style */
+h1, h2 {
+    color: #4CAF50;
+    text-align: center;
+}
+
+/* Styling for the input box and button */
+.ingredient-input {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.ingredient-input input {
+    padding: 12px;
+    width: 70%;
+    margin-right: 15px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+.ingredient-input button {
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.ingredient-input button:hover {
+    background-color: #45a049;
+}
+
+/* Ingredient Image Styling */
+.ingredient-image-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.ingredient-image {
+    width: 100%;
+    height: 300px;
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    display: none;
+}
+
+/* Recipes List Styling */
+.recipe-section {
+    margin-top: 30px;
+}
+
+.recipelist {
+    list-style-type: none;
+    padding: 0;
+}
+
+.recipelist li {
+    padding: 12px;
+    background-color: #f0f0f0;
+    margin: 8px 0;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.recipelist li:hover {
+    background-color: #f1f8e9;
+}
+
+.recipelist a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+.recipelist a:hover {
+    color: #4CAF50;
+}
+
+/* Nutrition Information Styling */
+.nutrition-info {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.nutrition-info ul {
+    padding-left: 0;
+}
+
+.nutrition-info li {
+    margin: 5px 0;
+}
