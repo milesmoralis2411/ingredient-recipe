@@ -1,189 +1,200 @@
-const apiKey = '20664e46e0a7415284feea62e9db69c6';  // Your API Key
+// script.js
+const apiKey = '20664e46e0a7415284feea62e9db69c6';
 
-// Get references to DOM elements
+// DOM Elements
 const getPairingsButton = document.getElementById('get-pairings');
 const userInput = document.getElementById('userInput');
 const recipeList = document.querySelector('.recipelist');
-const favoritesList = document.getElementById('favoritesList');  // Favorites List
+const favoritesList = document.getElementById('favoritesList');
 const ingredientImage = document.getElementById('ingredientImage');
 const ingredientInfo = document.getElementById('ingredientInfo');
-const suggestionsList = document.getElementById('suggestions'); // Auto-suggestions list
+const suggestionsList = document.getElementById('suggestions');
+const darkModeToggle = document.getElementById('darkModeToggle');
+const modeText = document.getElementById('modeText');
 
-// Event listener for the button click
-getPairingsButton.addEventListener('click', function() {
-    const ingredient = userInput.value.trim();
-
-    if (ingredient) {
-        fetchRecipes(ingredient);
-        fetchIngredientInfo(ingredient);
-    } else {
-        alert("Please enter an ingredient.");
+// Load saved preferences
+document.addEventListener("DOMContentLoaded", () => {
+    displayFavorites();
+    if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark-mode');
+        darkModeToggle.checked = true;
+        modeText.textContent = "🌙 Dark Mode";
     }
 });
 
-// Function to fetch recipes
-function fetchRecipes(ingredient) {
-    const url = `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredient}&apiKey=${apiKey}`;
+// Dark Mode Toggle
+darkModeToggle.addEventListener('change', () => {
+    document.body.classList.toggle('dark-mode');
+    const isDark = darkModeToggle.checked;
+    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+    modeText.textContent = isDark ? "🌙 Dark Mode" : "🌞 Light Mode";
+});
 
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            recipeList.innerHTML = '';  
+// Search Recipes
+getPairingsButton.addEventListener('click', () => {
+    const ingredient = userInput.value.trim();
+    if (ingredient) {
+        fetchRecipes(ingredient);
+        fetchIngredientImage(ingredient);
+        recipeList.innerHTML = '<li class="loading">Loading recipes...</li>';
+    } else {
+        ingredientInfo.innerHTML = '<p class="error">Please enter an ingredient!</p>';
+    }
+});
 
-            if (data.length > 0) {
-                data.forEach(recipe => {
-                    fetchRecipeDetails(recipe.id, recipe.title, recipe.image);
-                });
-            } else {
-                recipeList.innerHTML = '<li>No recipes found for this ingredient.</li>';
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching recipes:', error);
-            recipeList.innerHTML = '<li>Error fetching recipes.</li>';
-        });
-}
-
-// Fetch detailed recipe information
-function fetchRecipeDetails(recipeId, title, imageUrl) {
-    const url = `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${apiKey}`;
-
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            const li = document.createElement('li');
-            const a = document.createElement('a');
-            const img = document.createElement('img');
-            const p = document.createElement('p');
-            const ingredientsList = document.createElement('ul');
-            const favButton = document.createElement('button');  // Favorite Button
-
-            a.href = `https://spoonacular.com/recipes/${title}-${recipeId}`;
-            a.target = '_blank';
-            a.textContent = title;
-
-            img.src = imageUrl;
-            img.alt = title;
-            img.style.width = '100px';
-            img.style.borderRadius = '5px';
-            img.style.marginRight = '10px';
-
-            p.innerHTML = data.summary.split(".")[0] + '.';
-
-            data.extendedIngredients.forEach(ingredient => {
-                const ingredientItem = document.createElement('li');
-                ingredientItem.textContent = `${ingredient.amount} ${ingredient.unit} of ${ingredient.name}`;
-                ingredientsList.appendChild(ingredientItem);
-            });
-
-            // Favorite button
-            favButton.textContent = "⭐ Add to Favorites";
-            favButton.classList.add('fav-btn');
-            favButton.addEventListener('click', () => addToFavorites(recipeId, title, imageUrl));
-
-            li.appendChild(img);
-            li.appendChild(a);
-            li.appendChild(p);
-            li.appendChild(ingredientsList);
-            li.appendChild(favButton);
-            recipeList.appendChild(li);
-        })
-        .catch(error => {
-            console.error('Error fetching recipe details:', error);
-        });
-}
-
-// Function to fetch ingredient auto-suggestions
-userInput.addEventListener('input', () => {
+// Autocomplete Suggestions
+userInput.addEventListener('input', debounce(() => {
     const query = userInput.value.trim();
-    if (query.length < 2) return;  // Fetch only if 2+ characters
+    if (query.length < 2) return;
 
-    fetch(`https://api.spoonacular.com/food/ingredients/autocomplete?query=${query}&apiKey=${apiKey}`)
+    fetch(`https://api.spoonacular.com/food/ingredients/autocomplete?query=${query}&number=5&apiKey=${apiKey}`)
         .then(response => response.json())
         .then(data => {
-            suggestionsList.innerHTML = ""; // Clear old suggestions
-
+            suggestionsList.innerHTML = "";
             data.forEach(item => {
-                let option = document.createElement("option");
+                const option = document.createElement("option");
                 option.value = item.name;
                 suggestionsList.appendChild(option);
             });
         })
         .catch(error => console.error('Error fetching suggestions:', error));
-});
+}, 300));
 
-// Function to add a recipe to favorites
-function addToFavorites(recipeId, title, imageUrl) {
+// Fetch Recipes
+function fetchRecipes(ingredient) {
+    fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredient}&number=10&apiKey=${apiKey}`)
+        .then(response => response.json())
+        .then(data => {
+            recipeList.innerHTML = '';
+            if (data.length > 0) {
+                data.forEach(recipe => fetchRecipeDetails(recipe.id));
+            } else {
+                recipeList.innerHTML = '<li>No recipes found. Try another ingredient!</li>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching recipes:', error);
+            recipeList.innerHTML = '<li>Failed to load recipes. Please try again.</li>';
+        });
+}
+
+// Fetch Recipe Details
+function fetchRecipeDetails(recipeId) {
+    fetch(`https://api.spoonacular.com/recipes/${recipeId}/information?includeNutrition=true&apiKey=${apiKey}`)
+        .then(response => response.json())
+        .then(data => {
+            const li = createRecipeCard(data);
+            recipeList.appendChild(li);
+        })
+        .catch(error => console.error('Error fetching recipe details:', error));
+}
+
+// Create Recipe Card
+function createRecipeCard(data) {
+    const li = document.createElement('li');
+    li.classList.add('recipe-card');
+    li.innerHTML = `
+        <div class="recipe-image">
+            <img src="${data.image || 'placeholder.jpg'}" alt="${data.title}" loading="lazy">
+        </div>
+        <div class="recipe-content">
+            <h3><a href="${data.sourceUrl}" target="_blank">${data.title}</a></h3>
+            <p>${data.summary.split('.')[0] + '.'}</p>
+            <div class="ingredients">
+                <h4>Ingredients:</h4>
+                <ul>${data.extendedIngredients.map(ing => `<li>${ing.original}</li>`).join('')}</ul>
+            </div>
+        </div>
+    `;
+    
+    const favButton = document.createElement('button');
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    const isFavorited = favorites.some(recipe => recipe.id === data.id);
+    favButton.innerHTML = isFavorited ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>';
+    favButton.classList.add('fav-btn');
+    favButton.setAttribute('data-id', data.id);
+    favButton.addEventListener('click', () => toggleFavorite(data.id, data.title, data.image, favButton));
+    li.appendChild(favButton);
+    
+    return li;
+}
+
+// Fetch Ingredient Image
+function fetchIngredientImage(ingredient) {
+    fetch(`https://api.spoonacular.com/food/ingredients/search?query=${ingredient}&number=1&apiKey=${apiKey}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.results && data.results.length > 0) {
+                const imageUrl = `https://spoonacular.com/cdn/ingredients_250x250/${data.results[0].image}`;
+                ingredientImage.src = imageUrl;
+                ingredientImage.style.display = 'block';
+                ingredientInfo.innerHTML = `<p>Showing recipes with ${ingredient}</p>`;
+            } else {
+                ingredientImage.style.display = 'none';
+                ingredientInfo.innerHTML = `<p>No image found for ${ingredient}</p>`;
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching ingredient image:', error);
+            ingredientImage.style.display = 'none';
+            ingredientInfo.innerHTML = '<p>Failed to load ingredient information</p>';
+        });
+}
+
+// Toggle Favorite (for adding only)
+function toggleFavorite(id, title, image, button) {
     let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-
-    if (!favorites.some(recipe => recipe.id === recipeId)) {
-        favorites.push({ id: recipeId, title, imageUrl });
+    const isFavorited = favorites.some(recipe => recipe.id === id);
+    
+    if (!isFavorited) {
+        favorites.push({ id, title, image });
+        button.innerHTML = '<i class="fas fa-star"></i>';
         localStorage.setItem('favorites', JSON.stringify(favorites));
         displayFavorites();
     }
 }
 
-// Function to display favorites
+// Remove Favorite
+function removeFavorite(id) {
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    favorites = favorites.filter(recipe => recipe.id !== id);
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    displayFavorites();
+    
+    // Update the recipe list button if it exists
+    const recipeButton = recipeList.querySelector(`.fav-btn[data-id="${id}"]`);
+    if (recipeButton) {
+        recipeButton.innerHTML = '<i class="far fa-star"></i>';
+    }
+}
+
+// Display Favorites
 function displayFavorites() {
     favoritesList.innerHTML = "";
-    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    
     favorites.forEach(recipe => {
         const li = document.createElement('li');
-        const a = document.createElement('a');
-        const img = document.createElement('img');
-        const removeBtn = document.createElement('button');
-
-        a.href = `https://spoonacular.com/recipes/${recipe.title}-${recipe.id}`;
-        a.target = '_blank';
-        a.textContent = recipe.title;
-
-        img.src = recipe.imageUrl;
-        img.style.width = '100px';
-
-        removeBtn.textContent = "❌ Remove";
-        removeBtn.classList.add('remove-btn');
-        removeBtn.addEventListener('click', () => removeFavorite(recipe.id));
-
-        li.appendChild(img);
-        li.appendChild(a);
-        li.appendChild(removeBtn);
+        li.classList.add('favorite-card');
+        li.innerHTML = `
+            <img src="${recipe.image}" alt="${recipe.title}" loading="lazy">
+            <a href="https://spoonacular.com/recipes/${recipe.title}-${recipe.id}" target="_blank">${recipe.title}</a>
+            <button class="remove-btn"><i class="fas fa-trash"></i></button>
+        `;
+        li.querySelector('.remove-btn').addEventListener('click', () => removeFavorite(recipe.id));
         favoritesList.appendChild(li);
     });
 }
 
-// Function to remove a recipe from favorites
-function removeFavorite(recipeId) {
-    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    favorites = favorites.filter(recipe => recipe.id !== recipeId);
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-    displayFavorites();
+// Debounce function to limit API calls
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
 }
-
-// Display favorites on page load
-document.addEventListener("DOMContentLoaded", displayFavorites);
-// Get references
-const darkModeToggle = document.getElementById('darkModeToggle');
-const modeText = document.getElementById('modeText');
-
-// Check stored preference
-if (localStorage.getItem('darkMode') === 'enabled') {
-    document.body.classList.add('dark-mode');
-    darkModeToggle.checked = true;
-    modeText.textContent = "🌙 Dark Mode";
-}
-
-// Toggle Dark Mode
-darkModeToggle.addEventListener('change', () => {
-    if (darkModeToggle.checked) {
-        document.body.classList.add('dark-mode');
-        localStorage.setItem('darkMode', 'enabled');
-        modeText.textContent = "🌙 Dark Mode";
-    } else {
-        document.body.classList.remove('dark-mode');
-        localStorage.setItem('darkMode', 'disabled');
-        modeText.textContent = "🌞 Light Mode";
-    }
-});
-
-
