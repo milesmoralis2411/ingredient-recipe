@@ -1,233 +1,335 @@
-/* General Styles */
+/* style.css */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-    margin: 0;
-    padding: 0;
-    background-image: url(top-view-different-seasonings-with-fresh-vegetables-dark-desk-spicy-pepper-food-salad-health.jpg);
-    background-size: cover; /* Ensures the background image covers the entire page */
+  background-color: #f7f9fd;
+  transition: background-color 0.3s;
 }
 
-/* Container for the whole page */
+body.dark-mode {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
 .container {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 90vw;
+  max-width: 62.5em;
+  margin: auto;
+  position: relative;
 }
 
-/* Header Style */
-h1, h2 {
-    color: #4CAF50;
-    text-align: center;
+.header-controls {
+  display: flex;
+  justify-content: space-between;
+  padding: 1em;
+  align-items: center;
 }
 
-/* Styling for the input box and button */
-.ingredient-input {
-    text-align: center;
-    margin-bottom: 30px;
+#card-counter {
+  font-weight: 500;
+  color: #363d55;
 }
 
-.ingredient-input input {
-    padding: 12px;
-    width: 70%;
-    margin-right: 15px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    outline: none;
+body.dark-mode #card-counter {
+  color: #ffffff;
 }
 
-.ingredient-input button {
-    padding: 12px 20px;
-    font-size: 16px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+#toggle-dark-mode {
+  background-color: #587ef4;
+  color: #ffffff;
+  padding: 0.5em 1em;
+  border-radius: 0.4em;
+  font-size: 1em;
 }
 
-.ingredient-input button:hover {
-    background-color: #45a049;
+.add-flashcard-con {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1.2em 1em;
+  gap: 1em;
 }
 
-/* Ingredient Image Styling */
-.ingredient-image-container {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.ingredient-image {
-    width: 100%;
-    height: 300px;
-    object-fit: contain;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    margin: 20px auto;
-    display: none;
-}
-
-/* Recipes List Styling */
-.recipe-section {
-    margin-top: 30px;
-}
-
-.recipelist {
-    list-style-type: none;
-    padding: 0;
-    color: #1e1e1e;
-}
-
-.recipelist li {
-    padding: 12px;
-    background-color: #f0f0f0;
-    margin: 8px 0;
-    border-radius: 6px;
-    transition: background-color 0.3s ease;
-}
-
-.recipelist li:hover {
-    background-color: #f1f8e9;
-}
-
-.recipelist a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-}
-
-.recipelist a:hover {
-    color: #4CAF50;
-}
-
-/* Nutrition Information Styling */
-.nutrition-info {
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-.nutrition-info ul {
-    padding-left: 0;
-}
-
-.nutrition-info li {
-    margin: 5px 0;
-}
-
-/* Media Queries for Responsive Design */
-@media (max-width: 768px) {
-    .container {
-        max-width: 100%;
-        margin: 20px;
-        padding: 15px;
-    }
-
-    .ingredient-input input {
-        width: 60%;
-    }
-
-    .ingredient-input button {
-        padding: 10px 18px;
-        font-size: 14px;
-    }
-
-    .ingredient-image {
-        height: 250px;
-    }
-
-    .recipe-section {
-        margin-top: 20px;
-    }
-
-    .recipelist li {
-        padding: 10px;
-    }
-
-    .nutrition-info {
-        font-size: 12px;
-    }
-}
-
-@media (max-width: 480px) {
-    .ingredient-input input {
-        width: 100%;
-        margin-right: 0;
-        margin-bottom: 10px;
-    }
-
-    .ingredient-input button {
-        width: 100%;
-        padding: 10px;
-        font-size: 14px;
-    }
-
-    .ingredient-image {
-        height: 200px;
-    }
-
-    .recipelist li {
-        padding: 8px;
-    }
-
-    .nutrition-info {
-        font-size: 12px;
-    }
-}
-/* Light Mode (Default) */
-:root {
-    --bg-color: #ffffff;
-    --text-color: #333;
-    --container-bg: #ffffff;
-    --button-bg: #007bff;
-    --button-text: #ffffff;
-}
-
-/* Dark Mode */
-.dark-mode {
-    --bg-color: #121212 !important;
-    --text-color: #f5f5f5 !important;
-    --container-bg: #1e1e1e !important;
-    --button-bg: #ff9800 !important;
-    --button-text: #121212 !important;
-}
-
-/* Apply Theme */
-body {
-    background-color: var(--bg-color) !important;
-    color: var(--text-color);
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Make sure the container also changes */
-.container {
-    background-color: var(--container-bg) !important;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
-}
-
-/* Button Styling */
 button {
-    background-color: var(--button-bg);
-    color: var(--button-text);
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  border: none;
+  outline: none;
+  cursor: pointer;
 }
 
-button:hover {
-    opacity: 0.8;
+.add-flashcard-con button,
+#clear-all {
+  font-size: 1em;
+  background-color: #587ef4;
+  color: #ffffff;
+  padding: 0.8em 1.2em;
+  font-weight: 500;
+  border-radius: 0.4em;
 }
-.toggle-container{
-    display: flex;
-    justify-content: center;
+
+#clear-all {
+  background-color: #ff5353;
+}
+
+#card-con {
+  margin-top: 1em;
+}
+
+.question-container {
+  width: 90vw;
+  max-width: 34em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #ffffff;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  padding: 3em 2em;
+  border-radius: 0.6em;
+  box-shadow: 0 1em 2em rgba(28, 0, 80, 0.1);
+  transition: background-color 0.3s;
+}
+
+body.dark-mode .question-container {
+  background-color: #2d2d2d;
+}
+
+.question-container h2 {
+  font-size: 2.2em;
+  color: #363d55;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 2em;
+}
+
+body.dark-mode .question-container h2 {
+  color: #ffffff;
+}
+
+.error-con {
+  align-self: center;
+}
+
+#error {
+  color: #ff5353;
+  font-weight: 400;
+}
+
+.fa-xmark {
+  font-size: 1.4em;
+  background-color: #587ef4;
+  height: 1.8em;
+  width: 1.8em;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  border-radius: 50%;
+  cursor: pointer;
+  justify-self: flex-end;
+}
+
+label {
+  color: #363d55;
+  font-weight: 600;
+  margin-bottom: 0.3em;
+}
+
+body.dark-mode label {
+  color: #ffffff;
+}
+
+textarea {
+  width: 100%;
+  padding: 0.7em 0.5em;
+  border: 1px solid #d0d0d0;
+  outline: none;
+  color: #414a67;
+  border-radius: 0.3em;
+  resize: none;
+  background-color: #ffffff;
+  transition: background-color 0.3s;
+}
+
+body.dark-mode textarea {
+  background-color: #3d3d3d;
+  color: #ffffff;
+  border-color: #555;
+}
+
+textarea:not(:last-child) {
+  margin-bottom: 1.2em;
+}
+
+textarea:focus {
+  border-color: #363d55;
+}
+
+body.dark-mode textarea:focus {
+  border-color: #587ef4;
+}
+
+#save-btn {
+  font-size: 1em;
+  background-color: #587ef4;
+  color: #ffffff;
+  padding: 0.6em 0;
+  border-radius: 0.3em;
+  font-weight: 600;
+}
+
+.card-list-container {
+  display: grid;
+  padding: 0.2em;
+  gap: 1.5em;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.card {
+  width: 100%;
+  height: 200px;
+  background-color: #ffffff;
+  box-shadow: 0 0.4em 1.2em rgba(28, 0, 80, 0.08);
+  border-radius: 0.4em;
+  perspective: 1000px;
+  position: relative;
+  transition: border 0.3s;
+}
+
+body.dark-mode .card {
+  background-color: #2d2d2d;
+}
+
+.card.favorite-card {
+  border: 2px solid #ffd700;
+}
+
+body.dark-mode .card.favorite-card {
+  border: 2px solid #ffd700;
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+}
+
+.card:hover .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
+}
+
+.card-front {
+  background-color: #f0f0f0;
+}
+
+body.dark-mode .card-front {
+  background-color: #3d3d3d;
+}
+
+.card-back {
+  background-color: #f7f9fd;
+  transform: rotateY(180deg);
+}
+
+body.dark-mode .card-back {
+  background-color: #2d2d2d;
+}
+
+.question-div,
+.answer-div {
+  font-weight: 500;
+  color: #363d55;
+  text-align: center;
+  padding: 10px;
+}
+
+body.dark-mode .question-div,
+body.dark-mode .answer-div {
+  color: #ffffff;
+}
+
+.answer-div {
+  color: #414a67;
+  font-weight: 400;
+}
+
+body.dark-mode .answer-div {
+  color: #d0d0d0;
+}
+
+.buttons-con {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.edit,
+.delete,
+.favorite {
+  background-color: transparent;
+  font-size: 1.2em;
+  cursor: pointer;
+  color: #587ef4;
+}
+
+.delete {
+  color: #ff5353;
+}
+
+.favorite {
+  color: #ffd700;
+}
+
+.favorite i.fa-solid {
+  color: #ffd700;
+}
+
+.hide {
+  display: none;
+}
+
+@keyframes cardAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .card-list-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8em;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  body {
+    font-size: 14px;
+  }
+  .card-list-container {
+    grid-template-columns: 1fr;
+    gap: 1.2em;
+  }
 }
