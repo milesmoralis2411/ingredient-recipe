@@ -3,29 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Finder and Ingredient Image</title>
+    <title>Recipe Finder</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body >
-    <div class="container" >
+<body>
+    <div class="toggle-container">
+        <label class="switch">
+            <input type="checkbox" id="darkModeToggle">
+            <span class="slider round"></span>
+        </label>
+        <span id="modeText" >🌞 Light Mode</span>
+    </div>
+
+    <div class="container">
         <div class="ingredient-input">
             <p>Enter an ingredient to get recipes and image</p>
-            <input type="text" id="userInput" placeholder="e.g., egg, apple">
+            <input type="text" id="userInput" list="suggestions" placeholder="e.g., egg, apple">
+            <datalist id="suggestions"></datalist>
             <button id="get-pairings">Get Recipes & Image</button>
         </div>
 
         <div class="ingredient-image-container">
             <img id="ingredientImage" class="ingredient-image" src="" alt="Ingredient Image" style="display: none;">
-            <div id="ingredientInfo"></div>  
+            <div id="ingredientInfo"></div>
         </div>
-       
 
         <div class="recipe-section">
             <h2>Recipes</h2>
             <ul class="recipelist"></ul>
         </div>
+
+        <div class="favorites-section">
+            <h2>⭐ Favorite Recipes</h2>
+            <ul id="favoritesList"></ul>
+        </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
-
