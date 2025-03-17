@@ -80,6 +80,7 @@ h1, h2 {
 .recipelist {
     list-style-type: none;
     padding: 0;
+    color: #1e1e1e;
 }
 
 .recipelist li {
@@ -179,4 +180,54 @@ h1, h2 {
     .nutrition-info {
         font-size: 12px;
     }
+}
+/* Light Mode (Default) */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #333;
+    --container-bg: #ffffff;
+    --button-bg: #007bff;
+    --button-text: #ffffff;
+}
+
+/* Dark Mode */
+.dark-mode {
+    --bg-color: #121212 !important;
+    --text-color: #f5f5f5 !important;
+    --container-bg: #1e1e1e !important;
+    --button-bg: #ff9800 !important;
+    --button-text: #121212 !important;
+}
+
+/* Apply Theme */
+body {
+    background-color: var(--bg-color) !important;
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Make sure the container also changes */
+.container {
+    background-color: var(--container-bg) !important;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+/* Button Styling */
+button {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+.toggle-container{
+    display: flex;
+    justify-content: center;
 }
