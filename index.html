@@ -1,43 +1,51 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recipe Finder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="toggle-container">
-        <label class="switch">
-            <input type="checkbox" id="darkModeToggle">
-            <span class="slider round"></span>
-        </label>
-        <span id="modeText" >🌞 Light Mode</span>
-    </div>
-
-    <div class="container">
-        <div class="ingredient-input">
-            <p>Enter an ingredient to get recipes and image</p>
-            <input type="text" id="userInput" list="suggestions" placeholder="e.g., egg, apple">
-            <datalist id="suggestions"></datalist>
-            <button id="get-pairings">Get Recipes & Image</button>
+    <header>
+        <div class="toggle-container">
+            <label class="switch">
+                <input type="checkbox" id="darkModeToggle">
+                <span class="slider round"></span>
+            </label>
+            <span id="modeText">🌞 Light Mode</span>
         </div>
+        <h1>Recipe Finder</h1>
+    </header>
 
-        <div class="ingredient-image-container">
-            <img id="ingredientImage" class="ingredient-image" src="" alt="Ingredient Image" style="display: none;">
-            <div id="ingredientInfo"></div>
-        </div>
+    <main class="container">
+        <section class="ingredient-input">
+            <p>Find delicious recipes with your ingredients</p>
+            <div class="input-wrapper">
+                <input type="text" id="userInput" list="suggestions" placeholder="e.g., chicken, tomato">
+                <datalist id="suggestions"></datalist>
+                <button id="get-pairings"><i class="fas fa-search"></i> Find Recipes</button>
+            </div>
+        </section>
 
-        <div class="recipe-section">
-            <h2>Recipes</h2>
+        <section class="ingredient-image-container">
+            <img id="ingredientImage" class="ingredient-image" src="" alt="Ingredient Image">
+            <div id="ingredientInfo" class="ingredient-info"></div>
+        </section>
+
+        <section class="recipe-section">
+            <h2><i class="fas fa-utensils"></i> Recipes</h2>
             <ul class="recipelist"></ul>
-        </div>
+        </section>
 
-        <div class="favorites-section">
-            <h2>⭐ Favorite Recipes</h2>
+        <section class="favorites-section">
+            <h2><i class="fas fa-star"></i> Favorite Recipes</h2>
             <ul id="favoritesList"></ul>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <script src="script.js"></script>
 </body>
